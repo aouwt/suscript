@@ -1,0 +1,44 @@
+$CONSOLE:ONLY
+'$DYNAMIC
+_DEST _CONSOLE
+
+CONST Sus = 1
+CONST Safe = 0
+
+DIM A(0) AS _BIT, P AS _INTEGER64
+
+ON ERROR GOTO E
+
+GOTO Begin
+
+E: 'Error handler
+PRINT USING "&: Internal (QB64) error (_####) at ######_. Attempting to resume program_._._."; prg; ERR; ERRORLINE
+RESUME NEXT
+
+IP: 'Increment pointer
+  P = P + 1
+  IF P > UBOUND(A) THEN _
+    REDIM _PRESERVE A(LBOUND(A) TO P) AS _BIT
+RETURN
+
+DP: 'Decrement pointer
+  P = P - 1
+  IF P < LBOUND(A) THEN _
+    REDIM _PRESERVE A(P TO UBOUND(A)) AS _BIT
+RETURN
+
+I: 'Input
+  INPUT "", a$
+  SELECT CASE LCASE$(LTRIM$(RTRIM$(a$))) 'Scrub the input
+    CASE "sus", "yes", "y", "sussy"
+      A(P) = Sus
+    CASE "not sus", "no", "n", "not sussy", "not", "safe"
+      A(P) = Safe
+    CASE ELSE
+      PRINT "Invalid susness you sussy baka"
+      GOTO I
+  END SELECT
+RETURN
+
+
+Begin:
